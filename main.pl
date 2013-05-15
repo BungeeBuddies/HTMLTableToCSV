@@ -1,9 +1,14 @@
 #!/usr/bin/perl
-$file = 'c00128.htm';
+$file = 'example.htm';
 open(MYFILE,$file);
+@parsedFile=();
 while(<MYFILE>){
-	chomp;
+	$_ =~ s/\s+//g;
 	$_ =~ s/(?!>$)>/>\n/g;
-	print "$_\n"
+	@tempArray = split('\n',$_);
+	push(@parsedFile,@tempArray);
+	print("$_\n");
  }
+ $arraySize = @parsedFile;
+ print "$arraySize\n";
  close (MYFILE); 
