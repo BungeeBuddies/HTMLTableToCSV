@@ -1,32 +1,55 @@
 #!/usr/bin/perl
-open ($file, "<" ,'example.htm');
-my $text = join('', <$file>);
-close ($file);
 
-chomp($text);
+use strict;
+use warnings;
+
+# open(FILE, "<", "tmpfile");
+# my @values = <FILE>;
+# close(FILE);
+
+open(FILE, "<" ,'example.htm');
+
+# my $text = join('', <FILE>);
+# chomp($text);
+
+my @array = <FILE>;
+close (FILE);
+
+open (WRITEFILE, ">>", "data.csv");
+# print WRITEFILE "Bob\n";
 
 # Remove break lines
-$text =~ s/\R//g;
+# $text =~ s/\R//g;
 
-# my @matches = $text =~ m/<table.*?>.*?(?=<\/font>)<font.*?>.*?<\/font>.*?<\/table>/g;
+# my @matches = $text =~ /<table.*?>.*?<\/table>/g;
+my $previous;
+for my $match (@array) {
+	$match =~ s/\R//g;
 
-my @matches = $text =~ m/<table.*?>.*?<\/table>/g;
+	if ($match =~ m/(<\/font>)/g) {
+		# $match = $1;
+		# print "$1\n";
+		$previous =~ s/<(|\/)b>//g;
+		print WRITEFILE "$previous, ";
 
-# {<font.*?>.*?<\/font>}g foreach @matches;
+		if ($previous =~ m/<b>/g) {
+			print WRITEFILE ", ";
+		}
+	}
 
+	if ($match =~ m/<\/table>/g) {
+		print WRITEFILE ", ";
+	}
 
-# print @matches;
+	if ($match =~ m/<td rowspan="2" align="center" nowrap="1">/g) {
+		print WRITEFILE "\n";
+	}
+	$previous = $match;
+}
 
-# print $text;
+# Print every match
+# print "$_\n\n" foreach @array;
 
-# my @matches = $text =~ /(?<=<font size="\d" face="Arial">\r\n).+(?=\r\n<\/font>)/g;
-
-# Remove tabs
-# s{^\s+|\s+$}{}g foreach @matches;
-# s{^<(|\/)b>|\s+$}{}g foreach @matches;
-
-# print @matches
-print "$_\n\n" foreach @matches;
-
-
+close (WRITEFILE); 
+# m/<font.*?>(.*?)<\/font>/g
 # (?<=<font size="\d" face="Arial">\n)(|\t)(|<b>)[\w\(\)\s,.\-:]+(|<\/b>)(?=\n<\/font>)
