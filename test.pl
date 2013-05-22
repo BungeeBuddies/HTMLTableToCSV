@@ -8,7 +8,12 @@ chomp($text);
 # Remove break lines
 $text =~ s/\R//g;
 
-my @matches = $text =~ m/<table.*?>.*?(?=<\/font>)<font.*?>.*?<\/font>.*?<\/table>/g;
+# my @matches = $text =~ m/<table.*?>.*?(?=<\/font>)<font.*?>.*?<\/font>.*?<\/table>/g;
+
+my @matches = $text =~ m/<table.*?>.*?<\/table>/g;
+
+# {<font.*?>.*?<\/font>}g foreach @matches;
+
 
 # print @matches;
 
