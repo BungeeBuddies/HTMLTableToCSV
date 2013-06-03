@@ -41,7 +41,7 @@ for my $match (@matches) {
 # 	}
 # 	print "\n";
 # }
-for my $y (0 ... scalar(@array)){
+for my $y (0 ... scalar(@array)-1){
 	for my $x (0 ... $#{$array[0]}){
 		print "$array[$y][$x],";
 	}
